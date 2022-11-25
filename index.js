@@ -1,33 +1,13 @@
 // index.js
-const { fetchMyIP, fetchCoordsByIP } = require('./iss');
+const { nextISSTimesForMyLocation } = require("./iss");
 
-fetchMyIP((error, ip) => {
-
+nextISSTimesForMyLocation((error, passTimes) => {
   if (error) {
-
-    console.log("It didn't work!" , error);
-    return;
+    return console.log("It didn't work!", error);
   }
 
-  if (typeof ip === 'string') {
-
-    console.log('It worked! Returned IP:' , ip);
-
-    fetchCoordsByIP(ip, (error, coOrds) => {
-      if (error) {
-        console.log('It didnt work!', error);
-      }
-      console.log(coOrds);
-    });
-  }
-  
+  passTimes.forEach(obj => {
+    const date = new Date(obj.risetime);
+    console.log(`Next pass at ${date} for ${obj.duration} seconds`);
+  });
 });
-
-// fetchCoordsByIP('123456', (error, coordinates) => {
-//   if (error) {
-//     console.log("It didn't work!" , error);
-//     return;
-//   }
-
-//   console.log('It worked! Returned coordinates:' , coordinates);
-// });
